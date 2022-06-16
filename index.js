@@ -24,7 +24,15 @@ app.post("/sign-up", (req,res) => {
 
 //Rota que cria um tweets
 app.post("/tweets", (req,res) => {
-
+  const { username, tweet } = req.body;
+  const { avatar } = usuarios.find(usuario => usuario.username === username);
+  const novoTweet = {
+		username: username,
+		avatar: avatar,
+	  tweet: tweet
+	}
+  tweets.push(novoTweet);
+  res.send("ok");
 });
 
 //Rota que fornece os tweets
