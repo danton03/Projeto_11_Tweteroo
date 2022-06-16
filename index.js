@@ -1,8 +1,33 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+app.use(express.json());
+app.use(cors());
+
+const usuarios = [];
 const tweets = [];
 
+//Rota que cria o usuário
+app.post("/sign-up", (req,res) => {
+  const usuario = req.body;
+  usuarios.push(usuario);
+  res.send("ok");
+});
+
+//Rota que cria um tweets
+app.post("/tweets", (req,res) => {
+
+});
+
+//Rota que fornece os tweets
 app.get("/tweets", (_,res) => {
   if (tweets.length < 10) {
     res.send(tweets);
@@ -14,5 +39,5 @@ app.get("/tweets", (_,res) => {
 });
 
 app.listen(5000, () => {
-  console.log('🛰️  Servidor iniciado!\nAcesse: http://localhost:5000')
+  console.log('🛰️  Servidor iniciado na porta 5000.')
 });
