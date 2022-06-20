@@ -24,28 +24,41 @@ app.post("/sign-up", (req,res) => {
 
 //Rota que cria um tweets
 app.post("/tweets", (req,res) => {
-  const { username, tweet } = req.body;
-  const { avatar } = usuarios.find(usuario => usuario.username === username);
-  const novoTweet = {
-		username: username,
-		avatar: avatar,
-	  tweet: tweet
-	}
-  tweets.push(novoTweet);
+  tweets.push(req.body);
   res.send("ok");
 });
 
 //Rota que fornece os tweets
 app.get("/tweets", (_,res) => {
+  let ultimosTweets = []
+  let tweetsRecentes = [];
   if (tweets.length < 10) {
-    res.send(tweets);
+    ultimosTweets = tweets;
   }
   else{
-    const ultimosTweets = tweets.slice(-10); 
-    res.send(ultimosTweets);
+    ultimosTweets = tweets.slice(-10); 
   }
-});
 
+  if (ultimosTweets.length > 0) {
+    for (let i = 0; i < ultimosTweets.length; i++) {
+      const item = ultimosTweets[i];
+      const { username, tweet } = item;
+      const { avatar } = usuarios.find(usuario => usuario.username === username);
+      tweetsRecentes.push(
+        {
+          username: username,
+          avatar: avatar,
+          tweet: tweet
+        }
+      );
+    }
+  }
+  else{
+    tweetsRecentes = ultimosTweets
+  }
+  res.send(tweetsRecentes);
+});
+  
 app.listen(5000, () => {
   console.log('🛰️  Servidor iniciado na porta 5000.')
 });
